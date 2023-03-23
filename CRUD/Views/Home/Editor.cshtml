@@ -1,0 +1,99 @@
+﻿@model CRUD.Models.Model
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+            
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+<h4>Registration Form</h4>
+<hr />
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Editor" asp-controller="Home" method="post">
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="AmtSend" class="control-label" ></label>
+                    <input asp-for="AmtSend" class="form-control" type="number" oninput="convert()" step="0.01"/>
+                    <span asp-validation-for="AmtSend" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="AmtRecieve" class="control-label"></label>
+                    <input asp-for="AmtRecieve" class="form-control" type="number" readonly/>
+                    <span asp-validation-for="AmtRecieve" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="SenderName" class="control-label"></label>
+                    <input asp-for="SenderName" class="form-control" />
+                    <span asp-validation-for="SenderName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="RecieverName" class="control-label"></label>
+                    <input asp-for="RecieverName" class="form-control" />
+                    <span asp-validation-for="RecieverName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Purpose" class="control-label"></label>
+                    <select asp-for="Purpose" class="form-control">
+                        <option value="Scholarship">Scholarship</option>
+                        <option value="Fee Payment">Fee Payment</option>
+                        <option value="Zakaat">Zakaat</option>
+                        <option value="Stock Investment">Stock Investment</option>
+                        <option value="Selling of Capital">Selling of Capital</option>
+                    </select>
+                    <span asp-validation-for="Purpose" class="text-danger"></span>
+                </div>
+                
+               @* <div class="form-group">
+                    <label asp-for="Purpose" class="control-label"></label>
+                    <input asp-for="Purpose" class="form-control" />
+                    <option value ="Scholarship"></option>
+                    <option value ="Fee Payment"></option>
+                    <option value="Zakaat"></option>
+                    <option value="Stock Investment"></option>
+                    <option value="Selling of Capital"></option>
+                    <span asp-validation-for="Purpose" class="text-danger"></span>
+                </div>
+
+                <div class="dropdown">
+                    <button asp-for="Purpose" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        Purpose
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#">Fee</a>
+                        <a class="dropdown-item" href="#">Scolarship</a>
+                        <a class="dropdown-item" href="#">Stock Investment</a>
+                        <a class="dropdown-item" href="#">Zakaat</a>
+                        <a class="dropdown-item" href="#">Selling of Capital</a>
+                    </div>
+                </div>*@
+
+                <div class="form-group">
+                    <input type="submit" class="btn btn-primary" value="Save Product" />
+                    <a href="@Url.Action("DetailsList","Home")" class="btn btn-secondary">Back To Details List</a>
+                </div>  
+            </form>
+        </div>
+    </div>
+</div>
+
+<style type="text/css">
+    .form-group {
+        margin-top: 20px !important;
+    }
+</style>
+
+<script>
+ 
+    function convert() {
+        let usd = document.getElementById("AmtSend").value;
+        let inr = document.getElementById("AmtRecieve");
+        fetch('https://api.exchangerate-api.com/v4/latest/USD')
+            .then(response => response.json())
+            .then(data => {
+                let rate = data.rates.INR;
+                inr.value = (usd * rate).toFixed(2);
+            });
+    }
+</script>
